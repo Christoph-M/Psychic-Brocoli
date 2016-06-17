@@ -14,11 +14,15 @@ public class Player : MonoBehaviour {
 
 	private bool particlesCanHit = true;
 
+    CharacterMotor motor;
+
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody> () as Rigidbody;
 
 		startPos = this.transform.position;
+
+        motor = GetComponent<CharacterMotor>();
 	}
 
 	void OnParticleCollision(GameObject other) {
@@ -38,12 +42,14 @@ public class Player : MonoBehaviour {
 		Vector3 movement = new Vector3 (hor, 0.0f, ver);
 		Vector3 shoot = new Vector3 (shootHor, 0.0f, shootVer);
 
-		rb.AddForce (movement * speed);
+        motor.inputMoveDirection = movement;
+
+        //rb.AddForce (movement * speed);
 
 		if (shoot != Vector3.zero) {
 			this.transform.rotation = Quaternion.LookRotation (shoot);
 
-			rb.angularVelocity = Vector3.zero;
+			//rb.angularVelocity = Vector3.zero;
 		}
 	}
 

@@ -94,6 +94,7 @@ public class WeaponSpawner : MonoBehaviour
 
         weapon.AddComponent<Rigidbody>();
         weapon.GetComponent<Rigidbody>().AddForce(deb, ForceMode.Impulse);
+        weapon.transform.eulerAngles = new Vector3(weapon.transform.eulerAngles.x + 10f, weapon.transform.eulerAngles.y, weapon.transform.eulerAngles.z);
     }
 
     int CountArray(GameObject[] array)

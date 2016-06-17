@@ -20,8 +20,8 @@ public class MouseInput : MonoBehaviour
 	{
 		cursorPlanePosition = Vector3.zero;
 		mainCamera = Camera.main;
-		currentLevel = GameObject.FindWithTag("Level");
-		mouseCollider = currentLevel.GetComponent<Collider>();
+		//currentLevel = GameObject.FindWithTag("Level");
+		//mouseCollider = currentLevel.GetComponent<Collider>();
 
 		cursorPlane = new Plane(Vector3.up ,cursorPlanePosition);
 	}
@@ -45,7 +45,7 @@ public class MouseInput : MonoBehaviour
 
 		cursorPosition = ScreenPointToWorldPointOnPlane(cursorPlane ,cursorScreenPosition  , mainCamera);
 
-		Vector3 cursorOnColliderPosition = ScreenPointToWorldPointOnCollider(mouseCollider, cursorScreenPosition, mainCamera);
+		//Vector3 cursorOnColliderPosition = ScreenPointToWorldPointOnCollider(mouseCollider, cursorScreenPosition, mainCamera);
 
 		float correctionAngle;
 
@@ -53,9 +53,9 @@ public class MouseInput : MonoBehaviour
 
 
 
-		correctionAngle = cursorOnColliderPosition.y - cursorPlanePosition.y;
+		//correctionAngle = cursorPlanePosition.y;
 
-		cursorPlanePosition.y += correctionAngle;
+		cursorPlanePosition.y = transform.position.y;
 
 		cursorPlane.SetNormalAndPosition(Vector3.up, cursorPlanePosition);
 
