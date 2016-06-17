@@ -16,8 +16,14 @@ public class WeaponSpawner : MonoBehaviour
 
     GameObject[] spawnedWeapons;
 
+    [HideInInspector]
+    public static GameObject weapons;
+
     void Start()
     {
+        if (weapons == null)
+            weapons = new GameObject();
+
         spawnedWeapons = new GameObject[maxNumberOfWeapons];
 
         RandomisedPosition();
@@ -51,15 +57,16 @@ public class WeaponSpawner : MonoBehaviour
                 do
                 {
                     targetPosition = RandomisedPosition();
-                    isPositionValid = CheckForWall(targetPosition);
+                    isPositionValid = CheckForWall(ref targetPosition);
+                    //Debug.Log("" + targetPosition + isPositionValid);
                 } while (isPositionValid);
 
                 Vector3 throwingLocation = throwingLocations[UnityEngine.Random.Range(0, throwingLocations.Length)].position;
 
                 GameObject newWeapon = (GameObject)Instantiate( weaponsPrefabs[UnityEngine.Random.Range(0, weaponsPrefabs.Length)],
-                                                                targetPosition,
+                                                                throwingLocation,
                                                                 Quaternion.identity );
-                //SetupWeapon(newWeapon, targetPosition, throwingLocation);
+                SetupWeapon(newWeapon, targetPosition, throwingLocation);
                 
                 AddToArray(spawnedWeapons, newWeapon);
                 yield return new WaitForSeconds(waitBetweenSpawns);
@@ -77,10 +84,16 @@ public class WeaponSpawner : MonoBehaviour
 
     void SetupWeapon(GameObject weapon, Vector3 target, Vector3 origin)
     {
-        weapon.transform.rotation = Quaternion.LookRotation(target - origin, Vector3.up);
+        weapon.transform.parent = weapons.transform;
+        //weapon.transform.rotation = Quaternion.LookRotation(target - origin, Vector3.up);
+        
+
+        Vector3 deb = CalculateTrajectory(origin, target, airTime);
+        //deb = this.transform.InverseTransformDirection(deb);
+        //Debug.Log(deb);
 
         weapon.AddComponent<Rigidbody>();
-        weapon.GetComponent<Rigidbody>().AddForce(CalculateTrajectory(origin, target, airTime), ForceMode.Impulse);
+        weapon.GetComponent<Rigidbody>().AddForce(deb, ForceMode.Impulse);
     }
 
     int CountArray(GameObject[] array)
@@ -119,10 +132,12 @@ public class WeaponSpawner : MonoBehaviour
         return randomPos;
     }
 
-    bool CheckForWall(Vector3 point)
+    bool CheckForWall(ref Vector3 point)
     {
         RaycastHit hitInfo;
-        Physics.Raycast(point, Vector3.down, out hitInfo);
+        Physics.SphereCast(point, 3f, Vector3.down, out hitInfo);
+
+        point = hitInfo.point;
 
         if (hitInfo.transform.tag == "Wall")
             return true;
@@ -132,14 +147,28 @@ public class WeaponSpawner : MonoBehaviour
 
     Vector3 CalculateTrajectory(Vector3 from, Vector3 to, float time)
     {
-        Vector3 gravity = Physics.gravity;
+        Vector3 gravity = -Physics.gravity;
         Vector3 velocityNeeded = Vector3.zero;
-        //Vector3 dir = to - from;
 
-        //dir = Quaternion.LookRotation(to-from, Vector3.up) * dir;
+        Vector3 toTarget = to - from;
+        Vector3 toTargetXZ = toTarget;
+        toTargetXZ.y = 0;
 
-        velocityNeeded.z = (to.z - from.z) / time;
-        velocityNeeded.y = (to.y + 0.5f * gravity.y * time * time - from.y) / time;
+        float y = toTarget.y;
+        float xz = toTargetXZ.magnitude;
+
+        float v0y = y / time + 0.5f * gravity.magnitude * time;
+        float v0xz = xz / time;
+
+        velocityNeeded = toTargetXZ.normalized;
+
+        velocityNeeded *= v0xz;
+
+        velocityNeeded.y = v0y;
+        
+
+        //velocityNeeded.z = (to.z - from.z) / time;
+        //velocityNeeded.y = (to.y + 0.5f * gravity.y * time * time - from.y) / time;
 
 
         return velocityNeeded;

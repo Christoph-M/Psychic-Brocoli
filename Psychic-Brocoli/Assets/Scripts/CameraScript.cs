@@ -14,6 +14,6 @@ public class CameraScript : MonoBehaviour {
 
         transform.position = Vector3.Lerp(transform.position, pointTo, 0.1f);
 
-        Debug.Log(pointTo);
+        //Debug.Log(pointTo);
 	}
 }
