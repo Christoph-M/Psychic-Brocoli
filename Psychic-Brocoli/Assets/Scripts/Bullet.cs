@@ -43,7 +43,7 @@ public class Bullet : MonoBehaviour {
         }
         if (rotateZ)
         {
-            transform.rotation *= Quaternion.Euler(0, 90 * Time.deltaTime, 0);
+            transform.rotation *= Quaternion.Euler(0, 360 * Time.deltaTime, 0);
         }
 	}
 
