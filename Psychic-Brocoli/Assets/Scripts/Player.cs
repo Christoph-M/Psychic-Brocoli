@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
-	public int player;
+	public uint player;
 
 	public float speed = 10.0f;
 
@@ -40,5 +40,12 @@ public class Player : MonoBehaviour {
 
 	public void Respawn() {
 		this.transform.position = startPos;
+
+		Score score = FindObjectOfType<Score> ();
+
+		switch (player) {
+			case 1: score.IncScore (1); break;
+			case 2: score.IncScore (0); break;
+		}
 	}
 }
