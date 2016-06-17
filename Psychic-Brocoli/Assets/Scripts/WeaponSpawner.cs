@@ -10,6 +10,9 @@ public class WeaponSpawner : MonoBehaviour
 
     public int dropZoneRadius = 10;
     public float airTime = 5;
+    [Space(10)]
+    public float waitBetweenSpawns = 0.5f;
+    public float waitWhenFull = 1f;
 
     GameObject[] spawnedWeapons;
 
@@ -24,6 +27,11 @@ public class WeaponSpawner : MonoBehaviour
         //Debug.Log(spawnedWeapons.Length);
     }
 
+    /// <summary>
+    /// The loop which constantly spawns boxes.
+    /// However only if spawnedWeapons has fewer Objects than maxNumberOfWeapons
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SpawnWeaponLoop()
     {
         while (true)
@@ -54,12 +62,12 @@ public class WeaponSpawner : MonoBehaviour
                 //SetupWeapon(newWeapon, targetPosition, throwingLocation);
                 
                 AddToArray(spawnedWeapons, newWeapon);
-                yield return new WaitForSeconds(UnityEngine.Random.Range(2, 6));
+                yield return new WaitForSeconds(waitBetweenSpawns);
             }
             if (objectsInArray == maxNumberOfWeapons)
-                waitTime = 2f;
+                waitTime = waitWhenFull;
             else
-                waitTime = 5f;
+                waitTime = waitBetweenSpawns;
 
 
             yield return new WaitForSeconds(waitTime);
