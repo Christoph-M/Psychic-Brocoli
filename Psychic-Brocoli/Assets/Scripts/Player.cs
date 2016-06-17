@@ -12,6 +12,8 @@ public class Player : MonoBehaviour {
 
 	private Vector3 startPos;
 
+	private bool particlesCanHit = true;
+
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody> () as Rigidbody;
@@ -22,7 +24,8 @@ public class Player : MonoBehaviour {
 	void OnParticleCollision(GameObject other) {
 		GameObject hitPlayer = other.transform.root.gameObject;
 
-		if (hitPlayer.tag == "Player" && hitPlayer.GetComponent<Player> ().player != this.player) {
+		if (particlesCanHit && hitPlayer.tag == "Player" && hitPlayer.GetComponent<Player> ().player != this.player) {
+			StartCoroutine (this.ParticleImmunity ());
 			this.Respawn ();
 		}
 	}
@@ -55,5 +58,13 @@ public class Player : MonoBehaviour {
 			case 1: score.IncScore (1); break;
 			case 2: score.IncScore (0); break;
 		}
+	}
+
+	IEnumerator ParticleImmunity() {
+		particlesCanHit = false;
+
+		yield return new WaitForSeconds (1.0f);
+
+		particlesCanHit = true;
 	}
 }
