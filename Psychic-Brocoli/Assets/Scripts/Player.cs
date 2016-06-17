@@ -27,6 +27,10 @@ public class Player : MonoBehaviour {
 
 		rb.AddForce (movement * speed);
 
-		if (shoot != Vector3.zero) this.transform.rotation = Quaternion.LookRotation (shoot);
+		if (shoot != Vector3.zero) {
+			this.transform.rotation = Quaternion.LookRotation (shoot);
+
+			rb.angularVelocity = Vector3.zero;
+		}
 	}
 }
