@@ -18,6 +18,14 @@ public class Player : MonoBehaviour {
 
 		startPos = this.transform.position;
 	}
+
+	void OnParticleCollision(GameObject other) {
+		GameObject hitPlayer = other.transform.root.gameObject;
+
+		if (hitPlayer.tag == "Player" && hitPlayer.GetComponent<Player> ().player != this.player) {
+			this.Respawn ();
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
