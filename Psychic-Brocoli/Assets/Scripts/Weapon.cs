@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour {
 	    if (Input.GetAxisRaw(shootKey) == 1)
         {
             GameObject temp = (GameObject)Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            temp.GetComponent<Bullet>().direction = transform.forward;
+            temp.GetComponent<Bullet>().direction = transform.right;
         }
 	}
 }
