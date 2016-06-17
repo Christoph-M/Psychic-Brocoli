@@ -7,14 +7,19 @@ public class Bullet : MonoBehaviour {
     public Vector3 direction;
     public float speed;
     public float bulletSpread = 0;
+    public bool tumble = false;
+    public bool rotateZ = false;
+
+    Vector3 tumbleVector;
 
 	private bool canCollide = false;
 	
     void Start()
     {
         direction = Quaternion.Euler(0, Random.Range(-bulletSpread, bulletSpread), 0) * direction;
-
+        transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0,90,0);
 		StartCoroutine (this.StartInactive ());
+        tumbleVector = new Vector3(Random.value * 360, Random.value * 360, Random.value * 360);
     }
 
 	void OnTriggerEnter(Collider other) {
@@ -32,6 +37,14 @@ public class Bullet : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position += direction * speed * Time.deltaTime;
+        if (tumble)
+        {
+            transform.rotation *= Quaternion.Euler(tumbleVector * Time.deltaTime);
+        }
+        if (rotateZ)
+        {
+            transform.rotation *= Quaternion.Euler(0, 90 * Time.deltaTime, 0);
+        }
 	}
 
 	IEnumerator StartInactive() {
