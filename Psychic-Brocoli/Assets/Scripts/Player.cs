@@ -22,9 +22,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnParticleCollision(GameObject other) {
-		GameObject hitPlayer = other.transform.root.gameObject;
-
-		if (particlesCanHit && hitPlayer.tag == "Player" && hitPlayer.GetComponent<Player> ().player != this.player) {
+		if (particlesCanHit && other.transform.root.GetComponent<Bullet> ().player != this.player) {
 			StartCoroutine (this.ParticleImmunity ());
 			this.Respawn ();
 		}
