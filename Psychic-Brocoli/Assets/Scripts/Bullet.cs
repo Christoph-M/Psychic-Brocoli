@@ -18,9 +18,13 @@ public class Bullet : MonoBehaviour {
     }
 
 	void OnTriggerEnter(Collider other) {
+		Debug.Log ("Triggered: " + other.tag);
 		if (other.tag == "Player" && canCollide) {
 			other.GetComponent<Player> ().Respawn ();
 
+			Destroy (this.gameObject);
+		} else if (other.tag == "Wall") {
+			Debug.Log ("Wall: " + other.tag);
 			Destroy (this.gameObject);
 		}
 	}
