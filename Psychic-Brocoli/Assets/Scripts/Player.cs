@@ -10,9 +10,13 @@ public class Player : MonoBehaviour {
 
 	private Rigidbody rb;
 
+	private Vector3 startPos;
+
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody> () as Rigidbody;
+
+		startPos = this.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -32,5 +36,9 @@ public class Player : MonoBehaviour {
 
 			rb.angularVelocity = Vector3.zero;
 		}
+	}
+
+	public void Respawn() {
+		this.transform.position = startPos;
 	}
 }
