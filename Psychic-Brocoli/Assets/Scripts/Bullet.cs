@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour {
     void Start()
     {
         direction = Quaternion.Euler(0, Random.Range(-bulletSpread, bulletSpread), 0) * direction;
-        transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0,90,0);
+        transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0,-90,0);
 		StartCoroutine (this.StartInactive ());
         tumbleVector = new Vector3(Random.value * 360, Random.value * 360, Random.value * 360);
     }
