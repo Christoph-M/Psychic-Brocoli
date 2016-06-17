@@ -44,14 +44,14 @@ public class WeaponSpawner : MonoBehaviour
                 {
                     targetPosition = RandomisedPosition();
                     isPositionValid = CheckForWall(targetPosition);
-                } while (!isPositionValid);
+                } while (isPositionValid);
 
                 Vector3 throwingLocation = throwingLocations[UnityEngine.Random.Range(0, throwingLocations.Length)].position;
 
                 GameObject newWeapon = (GameObject)Instantiate( weaponsPrefabs[UnityEngine.Random.Range(0, weaponsPrefabs.Length)],
-                                                                throwingLocation,
+                                                                targetPosition,
                                                                 Quaternion.identity );
-                SetupWeapon(newWeapon, targetPosition, throwingLocation);
+                //SetupWeapon(newWeapon, targetPosition, throwingLocation);
                 
                 AddToArray(spawnedWeapons, newWeapon);
                 yield return new WaitForSeconds(UnityEngine.Random.Range(2, 6));
@@ -72,7 +72,7 @@ public class WeaponSpawner : MonoBehaviour
         weapon.transform.rotation = Quaternion.LookRotation(target - origin, Vector3.up);
 
         weapon.AddComponent<Rigidbody>();
-        weapon.GetComponent<Rigidbody>().velocity = CalculateTrajectory(origin, target, airTime);
+        weapon.GetComponent<Rigidbody>().AddForce(CalculateTrajectory(origin, target, airTime), ForceMode.Impulse);
     }
 
     int CountArray(GameObject[] array)
@@ -108,7 +108,6 @@ public class WeaponSpawner : MonoBehaviour
         Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * dropZoneRadius;
         Vector3 randomPos = new Vector3(transform.position.x + randomCircle.x, transform.position.y, transform.position.z + randomCircle.y);
 
-        print(randomPos);
         return randomPos;
     }
 
