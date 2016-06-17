@@ -4,15 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
-	public int player;
+	public uint player;
 
 	public float speed = 10.0f;
 
 	private Rigidbody rb;
 
+	private Vector3 startPos;
+
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody> () as Rigidbody;
+
+		startPos = this.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -31,6 +35,17 @@ public class Player : MonoBehaviour {
 			this.transform.rotation = Quaternion.LookRotation (shoot);
 
 			rb.angularVelocity = Vector3.zero;
+		}
+	}
+
+	public void Respawn() {
+		this.transform.position = startPos;
+
+		Score score = FindObjectOfType<Score> ();
+
+		switch (player) {
+			case 1: score.IncScore (1); break;
+			case 2: score.IncScore (0); break;
 		}
 	}
 }
