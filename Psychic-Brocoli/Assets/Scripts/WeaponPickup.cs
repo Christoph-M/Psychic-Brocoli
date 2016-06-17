@@ -11,7 +11,7 @@ public class WeaponPickup : MonoBehaviour {
         if (other.tag == "Player" && other.GetComponentInChildren(typeof(Weapon)) == null)
         {
             GameObject temp = (GameObject)Instantiate(weaponList[Random.Range(0, weaponList.Count)], other.transform.FindChild("Cube").transform.position, other.transform.rotation);
-            temp.GetComponent<Weapon>().shootKey = "Shoot"+ other.GetComponent<Player>().player.ToString();
+			temp.GetComponent<Weapon> ().player = other.GetComponent<Player> ().player;
             temp.transform.parent = other.transform;
             Destroy(this.gameObject);
         }

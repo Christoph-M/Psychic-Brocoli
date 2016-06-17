@@ -5,15 +5,16 @@ using System.Collections;
 public class Weapon : MonoBehaviour
 {
     public GameObject bulletPrefab;
-    public string shootKey;
+	public uint player;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetAxisRaw(shootKey) == 1)
+		if (Input.GetAxisRaw("Shoot" + player) == 1)
         {
             GameObject temp = (GameObject)Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             temp.GetComponent<Bullet>().direction = transform.right;
+			temp.GetComponent<Bullet> ().player = this.player;
             Destroy(this.gameObject);
         }
     }
